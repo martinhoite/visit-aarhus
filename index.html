@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Prevent robots from indexing this page, just in case they end up here from another link
         (read: https://support.google.com/webmasters/answer/6062608?hl=en) -->
@@ -21,18 +22,30 @@
 </head>
 
 <body>
+    <div class="fixed-action-btn toolbar">
+        <a class="btn-floating btn-large red waves-effect waves-light">
+            <i class="large material-icons">menu</i>
+        </a>
+        <ul>
+            <li><a class="waves-effect waves-light btn-small">Map</a></li>
+            <li><a class="waves-effect waves-light btn-small">Overview</a></li>
+            <li><a class="waves-effect waves-light btn-small">Stuff</a></li>
+            <li><a class="waves-effect waves-light btn-small">Contact</a></li>
+            <!-- <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li> -->
+        </ul>
+    </div>
     <div id='map'></div>
-
 
     <!-- jQuery.js for an easier time with JS (dependency for other libraries  https://jquery.com/) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Materializecss for layout and UX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!--  -->
+    <!-- Load MapBox to display map with events etc. -->
     <script src='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.css' rel='stylesheet' />
-
-
     <!-- Load main javascript file -->
     <script src="js/MainScript.js"></script>
 </body>

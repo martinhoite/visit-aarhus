@@ -16,3 +16,21 @@ function showMap(err, data) {
         map.setView([data.latlng[0], data.latlng[1]], 13);
     }
 }
+
+//Initialization for MaterializeCSS
+$(document).ready(function(){
+    $('.tooltipped').tooltip();
+  });
+//Setup Nav button  
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems, {
+    //   direction: 'up',
+    //   hoverEnabled: false,
+      toolbarEnabled: true
+    });
+  });
+
+  $('.fixed-action-btn').floatingActionButton({
+    toolbarEnabled: true
+  });
