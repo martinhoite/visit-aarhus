@@ -27,7 +27,8 @@
             <i class="large material-icons">menu</i>
         </a>
         <ul>
-            <li><a class="waves-effect waves-light btn-small">Map</a></li>
+
+            <li><a href="#" data-target="slide-out" class="sidenav-trigger">Filters</a></li>
             <li><a class="waves-effect waves-light btn-small">Overview</a></li>
             <li><a class="waves-effect waves-light btn-small">Stuff</a></li>
             <li><a class="waves-effect waves-light btn-small">Contact</a></li>
@@ -37,8 +38,36 @@
             <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li> -->
         </ul>
     </div>
-    <div id='map'></div>
+    <!-- <nav class='menu-ui'>
+        <a href='#' class='active' data-filter='all'>Show all</a>
+        <a href='#' data-filter='water'>Water Recreation</a>
+        <a href='#' data-filter='outdoor'>Outdoor Recreation</a>
+        <a href='#' data-filter='civil'>Civil War</a>
+        <a href='#' data-filter='wildlife'>Wildlife</a>
+        <a href='#' data-filter='heritage'>Heritage & Culture</a>
+      </nav> -->
+    <ul id="slide-out" class="sidenav">
+        <li><a href='#' class='active' data-filter='all'>Show all</a></li>
+        <li><a href='#' data-filter='water'>Water Recreation</a></li>
+        <li><a href='#' data-filter='outdoor'>Outdoor Recreation</a></li>
+        <li><a href='#' data-filter='civil'>Civil War</a></li>
+        <li><a href='#' data-filter='wildlife'>Wildlife</a></li>
+        <li><a href='#' data-filter='heritage'>Heritage & Culture</a></li>
+    </ul>
 
+    <div id='map'></div>
+    <!-- Modal Structure -->
+    <div id="markerModal" class="modal">
+        <div class="modal-content">
+            <h4 id="modalMarkerTitle">Modal Header</h4>
+            <p id="modalMarkerContent">A bunch of text</p>
+            <p><i class="material-icons">home</i> <span id="modalAddress"></span></p>
+            <div id="modalTagContainer"></div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
     <!-- jQuery.js for an easier time with JS (dependency for other libraries  https://jquery.com/) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Materializecss for layout and UX -->
