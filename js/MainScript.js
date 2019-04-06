@@ -67,56 +67,82 @@ var geoJson = [];
 // }).always(function () {
 //   console.log("complete");
 // });
+function populateMap(targetAPI, queryParameters) {
+  // let url = 'https://api.detskeriaarhus.dk/api/' + targetAPI + "?" + queryParameters;
+  // console.log(url);
+  url = 'https://api.detskeriaarhus.dk/api/occurrences?startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200';
+  console.log(url);
 
-$.getJSON("https://api.detskeriaarhus.dk/api/places?items_per_page=1250", function (data) {
-  // console.log("success");
-}).done(function (data) {
-  // console.log("second success");
-  // console.log(data);
-  $.each(data, function (key, place) {
-    // console.log(occurrence);
-    geoJson.push({
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [place.longitude, place.latitude]
-      },
-      properties: {
-        title: place.name, //occurrence.event.name,
-        address: place.streetAddress + ", " + place.postalCode + " " + place.addressLocality,
-        description: "description", //place.tags, //occurrence.event.description,
-        tags: place.tags,
-        'marker-color': '#000'
-      }
-    });
-    // console.log('Added: ' + place.name);
-    // console.log(place.latitude + " , " + place.longitude);
+  $.getJSON(url, function (data) {
+    // console.log("success");
+    geoJson = [];
+    console.log(data);
+  }).done(function (data) {
+    // console.log("second success");
+    // console.log(data);
+
+    switch (targetAPI) {
+      case "occurrences":
+        // console.log(occurrence.place.longitude);
+        // if (place.longitude.length != 0) {
+          $.each(data, function (key, occurrence) {
+            console.log(occurrence.place.longitude, occurrence.place.latitude);
+            // console.log(occurrence);
+            geoJson.push({
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [occurrence.place.longitude, occurrence.place.latitude]
+              },
+              properties: {
+                title: occurrence.place.name, //occurrence.event.name,
+                address: occurrence.place.streetAddress + ", " + occurrence.place.postalCode + " " + occurrence.place.addressLocality,
+                description: occurrence.event.description, //place.tags, //occurrence.event.description,
+                tags: occurrence.event.tags,
+                'marker-color': '#000'
+              }
+            });
+          });
+        // }
+        // else {
+        //   console.log('god damn it');
+        // }
+        break;
+      case "places":
+        $.each(data, function (key, place) {
+          // console.log(occurrence);
+
+          geoJson.push({
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [place.longitude, place.latitude]
+            },
+            properties: {
+              title: place.name, //occurrence.event.name,
+              address: place.streetAddress + ", " + place.postalCode + " " + place.addressLocality,
+              description: place.description, //place.tags, //occurrence.event.description,
+              tags: place.tags,
+              'marker-color': '#000'
+            }
+          });
+
+        });
+        break;
+    }
+    markers.setGeoJSON(geoJson);
+  }).fail(function () {
+    console.log("Error while pulling API data");
+  }).always(function () {
+    // console.log("complete");
   });
-  // geoJson.push({
-  //   type: 'Feature',
-  //     geometry: {
-  //     type: 'Point',
-  //       // coordinates: [-87.949444, 36.308056]
-  //       coordinates: [10.2064256, 56.1520891]
+  // console.log(geoJson);
+}
 
-  //   },
-  //   properties: {
-  //     title: 'Benton-Houston Ferry',
-  //       address: '1234 Fake Street, Somewhere, TN 38888',
-  //         description: 'Some Random text',
-  //           'marker-color': '#000'
-  //   }
-  // });
-  // console.log('Adding markers to map');
-
-  markers.setGeoJSON(geoJson);
-}).fail(function () {
-  console.log("Error while pulling API data");
-}).always(function () {
-  // console.log("complete");
-});
-// console.log(geoJson);
-
+//Initial map setup - pull all places
+// populateMap("places","items_per_page=1250");
+populateMap("occurrences", "occurrences?startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
+//occurrences?endDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00
 
 // Listener for marker click
 markers.on('click', function (e) {
@@ -126,19 +152,19 @@ markers.on('click', function (e) {
   var modalInstance = M.Modal.getInstance($('.modal'));
   var feature = e.layer.feature;
   var title = feature.properties.title;
-  var content = feature.properties.description;
+  var description = feature.properties.description;
   var address = feature.properties.address;
   var tags = feature.properties.tags;
   let formattedTags = "";
   for (i = 0; i < tags.length; i++) {
     formattedTags += '<div class="chip">' + tags[i] + '</div>';
-  }; 
-  
+  };
+
   // var latlng = feature.geometry.coordinates;
 
   // Modal Content
   $("#modalMarkerTitle").text(title);
-  $("#modalMarkerContent").text(content);
+  $("#modalMarkerDescription").html(description);
   $("#modalAddress").text(address);
   $("#modalTagContainer").html(formattedTags);
 
