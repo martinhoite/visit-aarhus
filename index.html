@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
@@ -27,10 +28,10 @@
         </a>
         <ul>
 
-            <li><a class="waves-effect waves-light btn-small" href="#" data-target="slide-out" class="sidenav-trigger">Filters</a></li>
-            <li><a class="waves-effect waves-light btn-small">Overview</a></li>
-            <li><a class="waves-effect waves-light btn-small">Stuff</a></li>
-            <li><a class="waves-effect waves-light btn-small">Contact</a></li>
+            <li><a class="sidenav-trigger" href="#" data-target="slide-out">Filters</a></li>
+            <li><a href="#">Overview</a></li>
+            <li><a href="#">Stuff</a></li>
+            <li><a href="#">Contact</a></li>
             <!-- <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
             <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
             <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
@@ -58,13 +59,19 @@
     <!-- Modal Structure -->
     <div id="markerModal" class="modal">
         <div class="modal-content">
-            <h4 id="modalMarkerTitle">Modal Header</h4>
-            <p id="modalMarkerDescription"></p>
-            <p><i class="material-icons">home</i> <span id="modalAddress"></span></p>
+            <h3 id="modalMarkerTitle">Modal Header</h3>
+            <p id="modalMarkerDescription" class="flow-text"></p>
+            <p id="modalEventTimeContainer" class="flow-text">
+                Fra kl: <span id="modalFromTime"></span>
+                <br>
+                <span>Til kl:</span> <span id="modalToTime"></span>
+            </p>
+            <p class="flow-text"><i class="material-icons inline-icon">home</i> <span id="modalAddress"></span></p>
             <div id="modalTagContainer"></div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+            <a id="modalNavigateToOccurrence" href="#!" class="waves-effect waves-green btn">Navigate to this <i
+                    class="material-icons right">navigation</i></a>
         </div>
     </div>
     <!-- jQuery.js for an easier time with JS (dependency for other libraries  https://jquery.com/) -->
@@ -73,7 +80,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <!-- Load MapBox to display map with events etc. -->
     <script src='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js'></script>
+    <script
+        src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/leaflet.markercluster.js'></script>
+
     <link href='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.Default.css'
+        rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.css'
+        rel='stylesheet' />
+    <!-- Load Moment.js for an easier time with handling Dates & Times -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/da.js"></script>
     <!-- Load main javascript file -->
     <script src="js/MainScript.js"></script>
 </body>
