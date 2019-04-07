@@ -149,6 +149,16 @@ function populateMap(targetAPI, queryParameters) {
         }
       });
 
+      //Add unique event tags to tag array, for filtering
+      if (v.properties.tags !== undefined) {
+        $.each(v.properties.tags, function (k, tag) {
+          if(!filterTags.includes(tag))  {
+            filterTags.push(tag);
+          }
+        });
+      }
+      
+
       // marker.bindPopup(title);
       markers.addLayer(marker);
     });
@@ -187,8 +197,21 @@ function populateMap(targetAPI, queryParameters) {
 //Initial map setup - pull all places
 // populateMap("places","items_per_page=1250");
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
-populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
-// console.log(new Date());
+
+let apiQueryParameters = 
+  encodeURIComponent("startDate[strictly_after]") + "=" + encodeURIComponent(moment().startOf('day').format())
+  + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format()) 
+  + "&items_per_page=200";
+
+//Manual replacement of characters that need to be URL encoded due to the API wanting a mix of things...
+//Actually nevermind, let's not use regex today. (See above for finished result instead)
+// apiQueryParameters = apiQueryParameters.replace("[","%5B").replace("]","%5D").replace(":","%3A");
+
+console.log(apiQueryParameters);
+populateMap("occurrences", apiQueryParameters);
+// populateMap("occurrences", "startDate%5Bstrictly_after%5D%3D2019-04-08T00%3A00%3A00%2B02%3A00%26endDate%5Bstrictly_before%5D%3D2019-04-08T23%3A59%3A59%2B02%3A00%26items_per_page%3D200");
+// populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-08T00%3A00%3A00%2B02%3A00&endDate%5Bstrictly_before%5D=2019-04-08T23%3A59%3A59%2B02%3A00&items_per_page=200");
+// populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
 
 
 // Listener for marker click
@@ -218,7 +241,7 @@ markers.on('click', function (e) {
   $("#modalMarkerTitle").text(title);
   $("#modalMarkerDescription").html(description);
   $("#modalAddress").html(address);
-  console.log(feature);
+  // console.log(feature);
   if (feature.properties.startDate == undefined) {
     $('#modalEventTimeContainer').hide();
   }else{
@@ -257,5 +280,5 @@ function getLocation() {
 }
 
 function showPosition(position) {
-  console.log("Navigate from: Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+  alert("Navigate from: Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
 }
