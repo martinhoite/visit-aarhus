@@ -62,16 +62,20 @@ body {
 }
 
 .inline-icon {
-  vertical-align: bottom;
-  font-size: 30px !important;
+    vertical-align: bottom;
+    font-size: 30px !important;
 }
 
-.margin-left{
-  margin-left:15px;
+.margin-left {
+    margin-left: 15px !important;
+}
+
+.margin-right {
+    margin-right: 15px !important;
 }
 
 /* Make cluster groups count text more visible on the map */
-.marker-cluster span{
+.marker-cluster span {
     font-weight: bold;
-    font-size:14px;
+    font-size: 14px;
 }

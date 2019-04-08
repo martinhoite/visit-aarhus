@@ -52,7 +52,8 @@
         <li>
             <div class="switch">
                 <label>
-                    <input class="filterCheckbox" id="showAllFiltersToggle" onchange="applyFilters('Alle', this)" checked="checked" data-filter="Alle" type="checkbox">
+                    <input class="filterCheckbox" id="showAllFiltersToggle" onchange="applyFilters('Alle', this)"
+                        checked="checked" data-filter="Alle" type="checkbox">
                     <span class="lever"></span>
                     <span id="showAllFiltersToggleText">Vis alle</span>
                 </label>
@@ -62,7 +63,8 @@
             <li>
                 <div class="switch">
                     <label>
-                        <input class="filterCheckbox" onchange="applyFilters('##filterTag##', this)" data-filter="##filterName##" type="checkbox">
+                        <input class="filterCheckbox" onchange="applyFilters('##filterTag##', this)"
+                            data-filter="##filterName##" type="checkbox">
                         <span class="lever"></span>
                         <span>##filterToggleText##</span>
                     </label>
@@ -79,22 +81,32 @@
 
     <div id='map'></div>
     <!-- Modal Structure -->
-    <div id="markerModal" class="modal">
+    <div id="markerModal" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h3 id="modalMarkerTitle">Modal Header</h3>
-            <p id="modalMarkerDescription" class="flow-text"></p>
             <p id="modalEventTimeContainer" class="flow-text">
                 Fra kl: <span id="modalFromTime"></span>
                 <br>
                 <span>Til kl:</span> <span id="modalToTime"></span>
             </p>
-            <p class="flow-text"><i class="material-icons inline-icon">home</i> <span id="modalAddress"></span></p>
             <div id="modalTagContainer"></div>
+            <p id="modalMarkerDescription" class="flow-text"></p>
+
+
         </div>
-        <!-- <div class="modal-footer">
-            <a id="modalNavigateToOccurrence" href="#!" class="waves-effect waves-green btn">Navigate to this <i
-                    class="material-icons right">navigation</i></a>
-        </div> -->
+        <div class="modal-footer">
+            <span class="flow-text margin-right left"><span id="modalAddress"></span></span>
+            <a id="modalNavigateToOccurrence" href="#!" data-longitude="" data-latitude=""
+                class="waves-effect waves-blue blue btn left margin-right">Navigate
+                <i class="material-icons right">navigation</i>
+            </a>
+            <a href="#!" class="margin-left waves-effect waves-light green btn left">Send to phone
+                <i class="material-icons right">phone_android</i>
+            </a>
+            <a href="#!" class="red btn modal-action modal-close">Close
+                <i class="material-icons right">close</i>
+            </a>
+        </div>
     </div>
     <!-- jQuery.js for an easier time with JS (dependency for other libraries  https://jquery.com/) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

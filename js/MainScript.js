@@ -163,11 +163,12 @@ function createMarkerGroup(filters) {
           startDate: v.properties.startDate,
           endDate: v.properties.endDate,
           tags: v.properties.tags
+          // coordinates: [v.longitude, v.latitude]
         },
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [v.longitude, v.latitude]
+          coordinates: [coordinates[0], coordinates[1]]
         }
       });
 
@@ -221,8 +222,8 @@ $(document).ready(function () {
   // console.log($('#showAllFiltersToggle').prop('checked'));
 });
 
-$('#modalNavigateToOccurrence').on("click", function () {
-  getLocation();
+$('#modalNavigateToOccurrence').on("click", function (e) {
+  getLocation(e);
 });
 
 function displayMarkerModal(e) {
@@ -260,7 +261,16 @@ function displayMarkerModal(e) {
     $('#modalToTime').html(moment(feature.properties.endDate).format('LLLL'));
   }
   $("#modalTagContainer").html(formattedTags);
+  $('#modalNavigateToOccurrence').data('longitude', feature.geometry.coordinates[0]);
+  $('#modalNavigateToOccurrence').data('latitude', feature.geometry.coordinates[1]);
 
+  //Remove empty p tags
+  $("p").each(function() { 
+    var $el = $(this);
+    if($.trim($el.html()) == "&nbsp;") {
+      $el.remove();
+    }
+  });
 
   modalInstance.open();
 
@@ -268,17 +278,21 @@ function displayMarkerModal(e) {
   map.panTo(e.layer.getLatLng());
 }
 
+var currentUserLocation;
+
 function getLocation() {
   if (navigator.geolocation) {
     var position = navigator.geolocation.getCurrentPosition(showPosition);
-
   } else {
-    $("#modalMarkerTitle").text("Geolocation is not supported by this browser.");
+    alert("Sorry - Geolocation is not supported by this browser.");
   }
 }
 
 function showPosition(position) {
-  alert("Navigate from: Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+  console.log($('#modalNavigateToOccurrence').data('latitude'));
+  alert("Navigate\nFrom: Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude + "\n To: Latitude:" + $('#modalNavigateToOccurrence').data('latitude') + ", Longitude: " + $('#modalNavigateToOccurrence').data('longitude') );
+  currentUserLocation = [position.coords.latitude, position.coords.longitude];
+  // alert(currentUserLocation);
 }
 
 //Handling for adding filters for all the current tags available on the current vissible occurences
