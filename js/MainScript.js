@@ -25,49 +25,9 @@ geocoder.query('Aarhus, DK', showMap);
 var featureMap = L.mapbox.featureLayer().addTo(map);
 
 var geoJson = [];
+var filterTags = ["Alle"];
 var markers = new L.MarkerClusterGroup();
-//   {
-//   type: 'Feature',
-//   geometry: {
-//     type: 'Point',
-//     coordinates: [-87.949444, 36.308056]
-//   },
-//   properties: {
-//     title: 'Benton-Houston Ferry',
-//     address: '1234 Fake Street, Somewhere, TN 38888',
-//     description: 'Some Random text',
-//     'marker-color': '#000'
-//   }
-// }, 
 
-// Assign handlers immediately after making the request,
-// and remember the jqxhr object for this request
-// $.getJSON("https://api.detskeriaarhus.dk/api/occurrences?endDate%5Bstrictly_after%5D=2019-05-06T10%3A00%3A00%2B00%3A00", function (data) {
-//   console.log("success");
-// }).done(function (data) {
-//   console.log("second success");
-//   // console.log(data);
-//   $.each(data, function (key, occurrence) {
-//     // console.log(occurrence);
-//     geoJson.push({
-//       type: 'Feature',
-//       geometry: {
-//         type: 'Point',
-//         coordinates: [occurrence.place.latitude, occurrence.place.longitude]
-//       },
-//       properties: {
-//         title: occurrence.event.name,
-//         address: occurrence.place.name + " " + occurrence.place.streetAddress + ", " + occurrence.place.postalCode + " " + occurrence.place.addressLocality,
-//         description: occurrence.event.description,
-//         'marker-color': '#000'
-//       }
-//     });
-//   });
-// }).fail(function () {
-//   console.log("error");
-// }).always(function () {
-//   console.log("complete");
-// });
 function populateMap(targetAPI, queryParameters) {
   let url = 'https://api.detskeriaarhus.dk/api/' + targetAPI + "?" + queryParameters;
   // console.log(url);
@@ -126,7 +86,7 @@ function populateMap(targetAPI, queryParameters) {
         });
         break;
     }
-    var filterTags = ["Alle"];
+    
     $.each(geoJson, function (k, v) {
       var coordinates = v.geometry.coordinates;
       // var title = v.properties.title;
@@ -152,12 +112,12 @@ function populateMap(targetAPI, queryParameters) {
       //Add unique event tags to tag array, for filtering
       if (v.properties.tags !== undefined) {
         $.each(v.properties.tags, function (k, tag) {
-          if(!filterTags.includes(tag))  {
+          if (!filterTags.includes(tag)) {
             filterTags.push(tag);
           }
         });
       }
-      
+
 
       // marker.bindPopup(title);
       markers.addLayer(marker);
@@ -165,13 +125,13 @@ function populateMap(targetAPI, queryParameters) {
 
     //Add current location marker
     var currentLocationMarker = L.marker(new L.LatLng(56.153473, 10.214455), {
-      icon: L.mapbox.marker.icon({'marker-color': 'FF0000' }),
+      icon: L.mapbox.marker.icon({ 'marker-color': 'FF0000' }),
       // title: title,
       properties: {
         title: "Dokk1 - Du er her", //occurrence.event.name,
         address: "Hack Kampmanns Pl. 2, 8000 Aarhus",
         description: "Du er i Dokk1 lige nu", //place.tags, //occurrence.event.description,
-        tags: ["Guidance","Information","Dokk1"],
+        tags: ["Guidance", "Information", "Dokk1"],
         'marker-color': '#ff0000'
       },
       type: 'Feature',
@@ -185,6 +145,9 @@ function populateMap(targetAPI, queryParameters) {
     // markers.setGeoJSON(geoJson);
 
     map.addLayer(markers);
+
+    //Add filters to menu
+    createFilterToggles();
     // markers.setGeoJSON(geoJson);
   }).fail(function () {
     console.log("Error while pulling API data");
@@ -198,9 +161,9 @@ function populateMap(targetAPI, queryParameters) {
 // populateMap("places","items_per_page=1250");
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
 
-let apiQueryParameters = 
+let apiQueryParameters =
   encodeURIComponent("startDate[strictly_after]") + "=" + encodeURIComponent(moment().startOf('day').format())
-  + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format()) 
+  + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format())
   + "&items_per_page=200";
 
 //Manual replacement of characters that need to be URL encoded due to the API wanting a mix of things...
@@ -228,14 +191,14 @@ markers.on('click', function (e) {
   let formattedTags = "";
   try {
     var tags = feature.properties.tags;
-  
-  for (i = 0; i < tags.length; i++) {
-    formattedTags += '<div class="chip">' + tags[i] + '</div>';
-  };  
+
+    for (i = 0; i < tags.length; i++) {
+      formattedTags += '<div class="chip">' + tags[i] + '</div>';
+    };
   } catch (error) {
     console.log('No tags attached to this occurrence');
   }
-  
+
 
   // Modal Content
   $("#modalMarkerTitle").text(title);
@@ -244,7 +207,7 @@ markers.on('click', function (e) {
   // console.log(feature);
   if (feature.properties.startDate == undefined) {
     $('#modalEventTimeContainer').hide();
-  }else{
+  } else {
     $('#modalEventTimeContainer').show();
     $('#modalFromTime').html(moment(feature.properties.startDate).format('LLLL'));
     $('#modalToTime').html(moment(feature.properties.endDate).format('LLLL'));
@@ -262,7 +225,7 @@ markers.on('click', function (e) {
 $(document).ready(function () {
   $('.tooltipped').tooltip();
   $('.modal').modal();
-  $('.fixed-action-btn').floatingActionButton({ toolbarEnabled: true });
+  $('.fixed-action-btn').floatingActionButton();
   $('.sidenav').sidenav({ edge: 'right' });
 });
 
@@ -273,7 +236,7 @@ $('#modalNavigateToOccurrence').on("click", function () {
 function getLocation() {
   if (navigator.geolocation) {
     var position = navigator.geolocation.getCurrentPosition(showPosition);
-    
+
   } else {
     $("#modalMarkerTitle").text("Geolocation is not supported by this browser.");
   }
@@ -281,4 +244,20 @@ function getLocation() {
 
 function showPosition(position) {
   alert("Navigate from: Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+}
+
+//Handling for adding filters for all the current tags available on the current vissible occurences
+let filterToggleTemple = $('#filterToggleTemplate').html();
+function createFilterToggles() {
+  $.each(filterTags, function (k, tag) {
+    let filterToggle = filterToggleTemple.replace("##filterTag##", tag).replace("##filterToggleText##", tag);
+    $(filterToggle).appendTo($('#slide-out'));
+  });
+};
+
+function applyFilters(tagName, checkboxObj) {
+  console.log(tagName);
+  console.log(checkboxObj.checked);
+  if (checkboxObj.checked) {
+  }
 }
