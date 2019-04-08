@@ -186,7 +186,7 @@ function createMarkerGroup(filters) {
   // markerLayer = map.addLayer(markers);
 
   // Listener for marker click
-  markers.on('click', function(e){
+  markers.on('click', function (e) {
     displayMarkerModal(e);
   });
 }
@@ -211,16 +211,55 @@ populateMap("occurrences", apiQueryParameters);
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
 
 
+var idleTimer = null;
+var idleState = false;
+const idleWait = 5000;
 
-
-//Initialization for MaterializeCSS
 $(document).ready(function () {
+  //Initialization for MaterializeCSS
   $('.tooltipped').tooltip();
   $('.modal').modal();
   $('.fixed-action-btn').floatingActionButton();
   $('.sidenav').sidenav({ edge: 'right' });
   // console.log($('#showAllFiltersToggle').prop('checked'));
+
+
+  //See if no action has happened
+  $('*').bind('mousemove keydown scroll', function () {
+
+    clearTimeout(idleTimer);
+
+    if (idleState == true) {
+      //Someone interacted with the screen, draw attention to filter
+      $(".fixed-action-btn").notify(
+        "You can add filters here",
+        {
+          position: "left-middle",
+          autoHide: true,
+          autoHideDelay: 10000,
+          clickToHide: true,
+          className: 'info'
+        }
+      );           
+    }
+
+    idleState = false;
+
+    idleTimer = setTimeout(function () {
+
+      // Idle Event
+      // $("body").append("<p>You've been idle for " + idleWait/1000 + " seconds.</p>");
+      
+      idleState = true;
+    }, idleWait);
+  });
+
+  $("body").trigger("mousemove");
+
+
 });
+
+
 
 $('#modalNavigateToOccurrence').on("click", function (e) {
   getLocation(e);
@@ -265,9 +304,9 @@ function displayMarkerModal(e) {
   $('#modalNavigateToOccurrence').data('latitude', feature.geometry.coordinates[1]);
 
   //Remove empty p tags in description
-  $("#modalMarkerDescription p").each(function() { 
+  $("#modalMarkerDescription p").each(function () {
     var $el = $(this);
-    if($.trim($el.html()) == "&nbsp;") {
+    if ($.trim($el.html()) == "&nbsp;") {
       $el.remove();
     }
   });
@@ -290,7 +329,7 @@ function getLocation() {
 
 function showPosition(position) {
   console.log($('#modalNavigateToOccurrence').data('latitude'));
-  alert("Navigate\nFrom: Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude + "\n To: Latitude:" + $('#modalNavigateToOccurrence').data('latitude') + ", Longitude: " + $('#modalNavigateToOccurrence').data('longitude') );
+  alert("Navigate\nFrom: Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude + "\n To: Latitude:" + $('#modalNavigateToOccurrence').data('latitude') + ", Longitude: " + $('#modalNavigateToOccurrence').data('longitude'));
   currentUserLocation = [position.coords.latitude, position.coords.longitude];
   // alert(currentUserLocation);
 }
