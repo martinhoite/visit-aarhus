@@ -68,7 +68,7 @@ function handleApiData(data, targetAPI) {
           },
           properties: {
             title: occurrence.place.name, //occurrence.event.name,
-            address: occurrence.place.streetAddress + ", " + occurrence.place.postalCode + " " + occurrence.place.addressLocality,
+            address: '<i class="material-icons inline-icon">home</i>' + occurrence.place.streetAddress + ", " + occurrence.place.postalCode + " " + occurrence.place.addressLocality,
             description: occurrence.event.description, //place.tags, //occurrence.event.description,
             startDate: occurrence.startDate,
             endDate: occurrence.endDate,
@@ -109,6 +109,9 @@ function handleApiData(data, targetAPI) {
       });
     }
   });
+
+  //Make sure filters are in alphabetic order
+  filterTags.sort();
 
   //Add current location marker
   var currentLocationMarker = L.marker(new L.LatLng(56.153473, 10.214455), {
@@ -223,7 +226,7 @@ $(document).ready(function () {
   $('.sidenav').sidenav({ edge: 'right' });
   // console.log($('#showAllFiltersToggle').prop('checked'));
 
-
+  let notificationText = "Klik for at filtrere";
   //See if no action has happened
   $('*').bind('mousemove keydown scroll', function () {
 
@@ -231,8 +234,27 @@ $(document).ready(function () {
 
     if (idleState == true) {
       //Someone interacted with the screen, draw attention to filter
+
+      //Handle different languages
+      switch (currentLanguage) {
+        case 'da':
+          notificationText = "Klik for at filtrere";
+          break;
+        case 'no':
+          notificationText = "Klikk for å filtrere";
+          break;
+        case 'de':
+          notificationText = "Klicken Sie, um zu filtern";
+          break;
+        case 'en-us':
+          notificationText = "Click here to add filters";
+          break;
+        default:
+          notificationText = "Klik for at filtrere";
+          break;
+      }
       $(".fixed-action-btn").notify(
-        "You can add filters here",
+        notificationText,
         {
           position: "left-middle",
           autoHide: true,
@@ -240,7 +262,7 @@ $(document).ready(function () {
           clickToHide: true,
           className: 'info'
         }
-      );           
+      );
     }
 
     idleState = false;
@@ -249,14 +271,11 @@ $(document).ready(function () {
 
       // Idle Event
       // $("body").append("<p>You've been idle for " + idleWait/1000 + " seconds.</p>");
-      
+
       idleState = true;
     }, idleWait);
   });
-
   $("body").trigger("mousemove");
-
-
 });
 
 
@@ -367,5 +386,53 @@ function applyFilters(tagName, checkboxObj) {
   createMarkerGroup(filteredTags);
   if (filteredTags.length == 0) {
     $('#showAllFiltersToggle').prop('checked', true);
+  }
+}
+var currentLanguage = "da";
+function changeActiveLanguage(e) {
+  $('#languageControlsContainer').find('a').removeClass('active');
+  $(e).addClass('active');
+  currentLanguage = $(e).data('language');
+
+  switch (currentLanguage) {
+    case 'da':
+      $('#languageControlsContainer').notify("Sprog er sat til Dansk", { position: "top-middle", className: "success" });
+      $('#filterMenuHeader').text('Filtrer begivenheder');
+      $('#showAllFiltersToggleText').text('Vis alle');
+      //Adjust modal text
+      $('#modalNavigateToOccurrence').html('Naviger<i class="material-icons right">navigation</i>');
+      $('#modalSendToPhone').html('Send til mobil<i class="material-icons right">phone_android</i>');
+      $('#modalClose').html('Luk<i class="material-icons right">close</i>');
+      break;
+    case 'no':
+      $('#languageControlsContainer').notify("Språk satt til norsk", { position: "top-middle", className: "success" });
+      $('#filterMenuHeader').text('Filter hendelser');
+      $('#showAllFiltersToggleText').text('Vis alle');
+      //Adjust modal text
+      $('#modalNavigateToOccurrence').html('Navigere<i class="material-icons right">navigation</i>');
+      $('#modalSendToPhone').html('Send til mobil<i class="material-icons right">phone_android</i>');
+      $('#modalClose').html('Lukk<i class="material-icons right">close</i>');
+      break;
+    case 'de':
+      $('#languageControlsContainer').notify("Sprache auf Deutsch eingestellt", { position: "top-middle", className: "success" });
+      $('#filterMenuHeader').text('Ereignisse filtern');
+      $('#showAllFiltersToggleText').text('Zeig es allen');
+      //Adjust modal text
+      $('#modalNavigateToOccurrence').html('Navigieren<i class="material-icons right">navigation</i>');
+      $('#modalSendToPhone').html('Senden Sie an das Telefon<i class="material-icons right">phone_android</i>');
+      $('#modalClose').html('Schließen<i class="material-icons right">close</i>');
+      break;
+    case 'en-us':
+      $('#languageControlsContainer').notify("Language set to English", { position: "top-middle", className: "success" });
+      $('#filterMenuHeader').text('Filter events');
+      $('#showAllFiltersToggleText').text('Show all');
+      //Adjust modal text
+      $('#modalNavigateToOccurrence').html('Navigate<i class="material-icons right">navigation</i>');
+      $('#modalSendToPhone').html('Send to mobile<i class="material-icons right">phone_android</i>');
+      $('#modalClose').html('Close<i class="material-icons right">close</i>');
+      break;
+    default:
+      $('#languageControlsContainer').notify("Unable to set language", { position: "top-middle", className: "error" });
+      break;
   }
 }

@@ -1,6 +1,13 @@
 body {
     margin: 0;
     padding: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 #map {
@@ -8,6 +15,24 @@ body {
     top: 0;
     bottom: 0;
     width: 100%;
+    z-index:2;
+}
+
+footer {
+    z-index: 3;
+    padding-top: 20px;
+    color: #fff;
+    text-shadow: 2px 2px #3d3d3d;
+}
+
+.v-align-middle {
+    vertical-align: middle;
+}
+
+.overlay{
+    background-color: rgba(69, 69, 69, 0.6);
+    padding: 5px 10px;
+    border-radius: 10px;
 }
 
 /* Ugly hack to  remove the info icon in the bottom right
@@ -78,4 +103,13 @@ body {
 .marker-cluster span {
     font-weight: bold;
     font-size: 14px;
+}
+
+#languageControlsContainer > a{
+    padding:0 2px;
+    box-sizing: border-box;
+}
+
+#languageControlsContainer > a.active > img{
+    border:2px solid yellow;
 }

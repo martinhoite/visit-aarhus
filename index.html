@@ -22,22 +22,24 @@
 </head>
 
 <body>
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large red waves-effect waves-light pulse sidenav-trigger" data-target="slide-out">
-            <i class="large material-icons">menu</i>
-        </a>
-        <!-- <ul> -->
-        <!-- <li><a class="sidenav-trigger" href="#" data-target="slide-out">Filters</a></li>
+    <main>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red waves-effect waves-light pulse sidenav-trigger"
+                data-target="slide-out">
+                <i class="large material-icons">menu</i>
+            </a>
+            <!-- <ul> -->
+            <!-- <li><a class="sidenav-trigger" href="#" data-target="slide-out">Filters</a></li>
             <li><a href="#">Overview</a></li>
             <li><a href="#">Stuff</a></li>
             <li><a href="#">Contact</a></li> -->
-        <!-- <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+            <!-- <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
             <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
             <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
             <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li> -->
-        <!-- </ul> -->
-    </div>
-    <!-- <nav class='menu-ui'>
+            <!-- </ul> -->
+        </div>
+        <!-- <nav class='menu-ui'>
         <a href='#' class='active' data-filter='all'>Show all</a>
         <a href='#' data-filter='water'>Water Recreation</a>
         <a href='#' data-filter='outdoor'>Outdoor Recreation</a>
@@ -45,67 +47,108 @@
         <a href='#' data-filter='wildlife'>Wildlife</a>
         <a href='#' data-filter='heritage'>Heritage & Culture</a>
       </nav> -->
-    <ul id="slide-out" class="sidenav flow-text">
-        <li>
-            <h4 class="margin-left">Filtrer events</h4>
-        </li>
-        <li>
-            <div class="switch">
-                <label>
-                    <input class="filterCheckbox" id="showAllFiltersToggle" onchange="applyFilters('Alle', this)"
-                        checked="checked" data-filter="Alle" type="checkbox">
-                    <span class="lever"></span>
-                    <span id="showAllFiltersToggleText">Vis alle</span>
-                </label>
-            </div>
-        </li>
-        <template id="filterToggleTemplate">
+        <ul id="slide-out" class="sidenav flow-text">
+            <li>
+                <h5 id="filterMenuHeader" class="margin-left">Filtrer begivenheder</h4>
+            </li>
             <li>
                 <div class="switch">
                     <label>
-                        <input class="filterCheckbox" onchange="applyFilters('##filterTag##', this)"
-                            data-filter="##filterName##" type="checkbox">
+                        <input class="filterCheckbox" id="showAllFiltersToggle" onchange="applyFilters('Alle', this)"
+                            checked="checked" data-filter="Alle" type="checkbox">
                         <span class="lever"></span>
-                        <span>##filterToggleText##</span>
+                        <span id="showAllFiltersToggleText">Vis alle</span>
                     </label>
                 </div>
             </li>
-        </template>
-        <!-- <li><a href='#' class='active' data-filter='all'>Show all</a></li>
+            <template id="filterToggleTemplate">
+                <li>
+                    <div class="switch">
+                        <label>
+                            <input class="filterCheckbox" onchange="applyFilters('##filterTag##', this)"
+                                data-filter="##filterName##" type="checkbox">
+                            <span class="lever"></span>
+                            <span>##filterToggleText##</span>
+                        </label>
+                    </div>
+                </li>
+            </template>
+            <!-- <li><a href='#' class='active' data-filter='all'>Show all</a></li>
         <li><a href='#' data-filter='water'>Water Recreation</a></li>
         <li><a href='#' data-filter='outdoor'>Outdoor Recreation</a></li>
         <li><a href='#' data-filter='civil'>Civil War</a></li>
         <li><a href='#' data-filter='wildlife'>Wildlife</a></li>
         <li><a href='#' data-filter='heritage'>Heritage & Culture</a></li> -->
-    </ul>
+        </ul>
 
-    <div id='map'></div>
-    <!-- Modal Structure -->
-    <div id="markerModal" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h3 id="modalMarkerTitle">Modal Header</h3>
-            <p id="modalEventTimeContainer" class="flow-text">
-                Fra kl: <span id="modalFromTime"></span>
-                <br>
-                <span>Til kl:</span> <span id="modalToTime"></span>
-            </p>
-            <div id="modalTagContainer"></div>
-            <p id="modalMarkerDescription" class="flow-text"></p>
+        <div id='map'></div>
+        <!-- Modal Structure -->
+        <div id="markerModal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h3 id="modalMarkerTitle">Modal Header</h3>
+                <p id="modalEventTimeContainer" class="flow-text">
+                    Fra kl: <span id="modalFromTime"></span>
+                    <br>
+                    <span>Til kl:</span> <span id="modalToTime"></span>
+                </p>
+                <div id="modalTagContainer"></div>
+                <p id="modalMarkerDescription" class="flow-text"></p>
+            </div>
+            <div class="modal-footer">
+                <span class="flow-text margin-right left"><span id="modalAddress"></span></span>
+                <a id="modalNavigateToOccurrence" href="#!" data-longitude="" data-latitude=""
+                    class="waves-effect waves-blue blue btn left margin-right">Navigate
+                    <i class="material-icons right">navigation</i>
+                </a>
+                <a id="modalSendToPhone" href="#!" class="margin-left waves-effect waves-light green btn left">Send to phone
+                    <i class="material-icons right">phone_android</i>
+                </a>
+                <a id="modalClose" href="#!" class="red btn modal-action modal-close">Close
+                    <i class="material-icons right">close</i>
+                </a>
+            </div>
         </div>
-        <div class="modal-footer">
-            <span class="flow-text margin-right left"><span id="modalAddress"></span></span>
-            <a id="modalNavigateToOccurrence" href="#!" data-longitude="" data-latitude=""
-                class="waves-effect waves-blue blue btn left margin-right">Navigate
-                <i class="material-icons right">navigation</i>
+    </main>
+
+    <footer class="valign-wrapper">
+        <!-- <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Footer Content</h5>
+                    <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer
+                        content.</p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Links</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="overlay left">
+            <span class="">© 2019 Visit Aarhus <img class="v-align-middle" src="images/visitaarhus-logo.png"
+                    alt="Visit Aarhus logo"></span>
+        </div>
+        <div id="languageControlsContainer" class="margin-left overlay hide-on-small-only">
+            <a href="#!" onclick="changeActiveLanguage(this);" data-language="da" class="active">
+                <img class="v-align-middle" src="images/flag-icons/da.gif" alt="Danish flag">
             </a>
-            <a href="#!" class="margin-left waves-effect waves-light green btn left">Send to phone
-                <i class="material-icons right">phone_android</i>
+            <a href="#!" onclick="changeActiveLanguage(this);" data-language="no">
+                <img class="v-align-middle" src="images/flag-icons/no.gif"  alt="Norwegian flag">
             </a>
-            <a href="#!" class="red btn modal-action modal-close">Close
-                <i class="material-icons right">close</i>
+            <a href="#!" onclick="changeActiveLanguage(this);" data-language="de">
+                <img class="v-align-middle" src="images/flag-icons/de.gif" alt="German flag">
+            </a>
+            <a href="#!" onclick="changeActiveLanguage(this);" data-language="en-us">
+                <img class="v-align-middle" src="images/flag-icons/en-us.gif" alt="Eng/US flag">
             </a>
         </div>
-    </div>
+    </footer>
+
     <!-- jQuery.js for an easier time with JS (dependency for other libraries  https://jquery.com/) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Materializecss for layout and UX -->
