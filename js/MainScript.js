@@ -25,8 +25,10 @@ geocoder.query('Aarhus, DK', showMap);
 var featureMap = L.mapbox.featureLayer().addTo(map);
 
 var geoJson = [];
-var filterTags = ["Alle"];
-var markers = new L.MarkerClusterGroup();
+var filterTags = [];
+var markers;
+var markerLayer;
+var overlays = L.layerGroup().addTo(map);
 
 function populateMap(targetAPI, queryParameters) {
   let url = 'https://api.detskeriaarhus.dk/api/' + targetAPI + "?" + queryParameters;
@@ -39,55 +41,115 @@ function populateMap(targetAPI, queryParameters) {
     geoJson = [];
     // console.log(data);
   }).done(function (data) {
-    // console.log("second success");
-    console.log(data);
+    handleApiData(data, targetAPI);
+  }).fail(function () {
+    console.log("Error while pulling API data");
+  }).always(function () {
+    // console.log("complete");
+  });
+  // console.log(geoJson);
+}
 
-    switch (targetAPI) {
-      case "occurrences":
-        $.each(data, function (key, occurrence) {
-          // console.log(occurrence.event.name);
-          // console.log(occurrence.event.startDate);
-          // console.log(occurrence.event.endDate);
-          geoJson.push({
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [occurrence.place.longitude, occurrence.place.latitude]
-            },
-            properties: {
-              title: occurrence.place.name, //occurrence.event.name,
-              address: occurrence.place.streetAddress + ", " + occurrence.place.postalCode + " " + occurrence.place.addressLocality,
-              description: occurrence.event.description, //place.tags, //occurrence.event.description,
-              startDate: occurrence.startDate,
-              endDate: occurrence.endDate,
-              tags: occurrence.event.tags
-              // 'marker-color': '#000'
-            }
-          });
-        });
-        break;
-      case "places":
-        $.each(data, function (key, place) {
-          geoJson.push({
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [place.longitude, place.latitude]
-            },
-            properties: {
-              title: place.name, //occurrence.event.name,
-              address: place.streetAddress + ", " + place.postalCode + " " + place.addressLocality,
-              description: place.description, //place.tags, //occurrence.event.description,
-              tags: place.tags,
-              // 'marker-color': '#000'
-            }
-          });
+function handleApiData(data, targetAPI) {
+  // console.log("second success");
+  // console.log(data);
 
+  switch (targetAPI) {
+    case "occurrences":
+      $.each(data, function (key, occurrence) {
+        // console.log(occurrence.event.name);
+        // console.log(occurrence.event.startDate);
+        // console.log(occurrence.event.endDate);
+        geoJson.push({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [occurrence.place.longitude, occurrence.place.latitude]
+          },
+          properties: {
+            title: occurrence.place.name, //occurrence.event.name,
+            address: occurrence.place.streetAddress + ", " + occurrence.place.postalCode + " " + occurrence.place.addressLocality,
+            description: occurrence.event.description, //place.tags, //occurrence.event.description,
+            startDate: occurrence.startDate,
+            endDate: occurrence.endDate,
+            tags: occurrence.event.tags
+            // 'marker-color': '#000'
+          }
         });
-        break;
+      });
+      break;
+    case "places":
+      $.each(data, function (key, place) {
+        geoJson.push({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [place.longitude, place.latitude]
+          },
+          properties: {
+            title: place.name, //occurrence.event.name,
+            address: place.streetAddress + ", " + place.postalCode + " " + place.addressLocality,
+            description: place.description, //place.tags, //occurrence.event.description,
+            tags: place.tags,
+            // 'marker-color': '#000'
+          }
+        });
+
+      });
+      break;
+  }
+
+  //Add unique event tags to tag array, for filtering
+  $.each(geoJson, function (k, v) {
+    if (v.properties.tags !== undefined) {
+      $.each(v.properties.tags, function (k, tag) {
+        if (!filterTags.includes(tag)) {
+          filterTags.push(tag);
+        }
+      });
     }
-    
-    $.each(geoJson, function (k, v) {
+  });
+
+  //Add current location marker
+  var currentLocationMarker = L.marker(new L.LatLng(56.153473, 10.214455), {
+    icon: L.mapbox.marker.icon({ 'marker-color': 'FF0000' }),
+    properties: {
+      title: "Dokk1 - Du er her", //occurrence.event.name,
+      address: "Hack Kampmanns Pl. 2, 8000 Aarhus",
+      description: "Du er i Dokk1 lige nu", //place.tags, //occurrence.event.description,
+      tags: ["Guidance", "Information", "Dokk1"],
+      'marker-color': '#ff0000'
+    },
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [10.214455, 56.153473]
+    }
+  });
+  map.addLayer(currentLocationMarker);
+  currentLocationMarker.on('click', function (e) {
+    displayMarkerModal(e);
+  });
+  // markers.addLayer(currentLocationMarker);
+  // markers.setGeoJSON(geoJson);
+
+
+  // console.log(test);
+
+  //Add filters to menu
+  createFilterToggles();
+  createMarkerGroup([]);
+
+}
+
+function createMarkerGroup(filters) {
+  markers = new L.MarkerClusterGroup();
+  $.each(geoJson, function (k, v) {
+    if (filters === undefined) {
+      return;
+    }
+    //Check if any of markers have the active filters
+    if ($(v.properties.tags).filter(filters).length > 0 || filters.length == 0 || filters.includes('Alle')) {
       var coordinates = v.geometry.coordinates;
       // var title = v.properties.title;
 
@@ -109,52 +171,23 @@ function populateMap(targetAPI, queryParameters) {
         }
       });
 
-      //Add unique event tags to tag array, for filtering
-      if (v.properties.tags !== undefined) {
-        $.each(v.properties.tags, function (k, tag) {
-          if (!filterTags.includes(tag)) {
-            filterTags.push(tag);
-          }
-        });
-      }
-
-
       // marker.bindPopup(title);
       markers.addLayer(marker);
-    });
-
-    //Add current location marker
-    var currentLocationMarker = L.marker(new L.LatLng(56.153473, 10.214455), {
-      icon: L.mapbox.marker.icon({ 'marker-color': 'FF0000' }),
-      // title: title,
-      properties: {
-        title: "Dokk1 - Du er her", //occurrence.event.name,
-        address: "Hack Kampmanns Pl. 2, 8000 Aarhus",
-        description: "Du er i Dokk1 lige nu", //place.tags, //occurrence.event.description,
-        tags: ["Guidance", "Information", "Dokk1"],
-        'marker-color': '#ff0000'
-      },
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [10.214455, 56.153473]
-      }
-    });
-    map.addLayer(currentLocationMarker);
-    // markers.addLayer(currentLocationMarker);
-    // markers.setGeoJSON(geoJson);
-
-    map.addLayer(markers);
-
-    //Add filters to menu
-    createFilterToggles();
-    // markers.setGeoJSON(geoJson);
-  }).fail(function () {
-    console.log("Error while pulling API data");
-  }).always(function () {
-    // console.log("complete");
+    }
   });
-  // console.log(geoJson);
+  // console.log(markerLayer);
+  // if (overlays !== undefined) {
+  // map.removeLayer(markerLayer);  
+  overlays.clearLayers();
+  console.log('Cleared layers');
+  // }
+  overlays.addLayer(markers);
+  // markerLayer = map.addLayer(markers);
+
+  // Listener for marker click
+  markers.on('click', function(e){
+    displayMarkerModal(e);
+  });
 }
 
 //Initial map setup - pull all places
@@ -170,15 +203,29 @@ let apiQueryParameters =
 //Actually nevermind, let's not use regex today. (See above for finished result instead)
 // apiQueryParameters = apiQueryParameters.replace("[","%5B").replace("]","%5D").replace(":","%3A");
 
-console.log(apiQueryParameters);
+// console.log(apiQueryParameters);
 populateMap("occurrences", apiQueryParameters);
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D%3D2019-04-08T00%3A00%3A00%2B02%3A00%26endDate%5Bstrictly_before%5D%3D2019-04-08T23%3A59%3A59%2B02%3A00%26items_per_page%3D200");
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-08T00%3A00%3A00%2B02%3A00&endDate%5Bstrictly_before%5D=2019-04-08T23%3A59%3A59%2B02%3A00&items_per_page=200");
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
 
 
-// Listener for marker click
-markers.on('click', function (e) {
+
+
+//Initialization for MaterializeCSS
+$(document).ready(function () {
+  $('.tooltipped').tooltip();
+  $('.modal').modal();
+  $('.fixed-action-btn').floatingActionButton();
+  $('.sidenav').sidenav({ edge: 'right' });
+  // console.log($('#showAllFiltersToggle').prop('checked'));
+});
+
+$('#modalNavigateToOccurrence').on("click", function () {
+  getLocation();
+});
+
+function displayMarkerModal(e) {
   // console.log(e);
   // Force close the popup.
   // e.layer.closePopup();
@@ -219,19 +266,7 @@ markers.on('click', function (e) {
 
   //Pan view to the clicked marker
   map.panTo(e.layer.getLatLng());
-});
-
-//Initialization for MaterializeCSS
-$(document).ready(function () {
-  $('.tooltipped').tooltip();
-  $('.modal').modal();
-  $('.fixed-action-btn').floatingActionButton();
-  $('.sidenav').sidenav({ edge: 'right' });
-});
-
-$('#modalNavigateToOccurrence').on("click", function () {
-  getLocation();
-});
+}
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -250,14 +285,34 @@ function showPosition(position) {
 let filterToggleTemple = $('#filterToggleTemplate').html();
 function createFilterToggles() {
   $.each(filterTags, function (k, tag) {
-    let filterToggle = filterToggleTemple.replace("##filterTag##", tag).replace("##filterToggleText##", tag);
+    let filterToggle = filterToggleTemple.replace("##filterTag##", tag).replace("##filterToggleText##", tag).replace("##filterName##", tag);
     $(filterToggle).appendTo($('#slide-out'));
   });
 };
 
 function applyFilters(tagName, checkboxObj) {
-  console.log(tagName);
-  console.log(checkboxObj.checked);
-  if (checkboxObj.checked) {
+  let filteredTags = [];
+  // console.log(checkboxObj);
+  // console.log('Applying filters');
+  if ($(checkboxObj).data('filter') != 'Alle') {
+    $('#showAllFiltersToggle').prop('checked', false);
+  }
+  $(".filterCheckbox").each(function (k, checkbox) {
+    if ($(checkboxObj).data('filter') == 'Alle') {
+      // checkbox.checked = false;
+      $(checkbox).prop('checked', false);
+    }
+    // console.log(checkbox.checked);
+    if (checkbox.checked) {
+      filteredTags.push($(checkbox).data('filter'));
+    }
+    // console.log(filteredTags);
+  });
+  if ($(checkboxObj).data('filter') == 'Alle') {
+    checkboxObj.checked = true;
+  }
+  createMarkerGroup(filteredTags);
+  if (filteredTags.length == 0) {
+    $('#showAllFiltersToggle').prop('checked', true);
   }
 }

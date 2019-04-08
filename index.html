@@ -52,7 +52,7 @@
         <li>
             <div class="switch">
                 <label>
-                    <input id="showAllFiltersToggle" data-filter="All" type="checkbox">
+                    <input class="filterCheckbox" id="showAllFiltersToggle" onchange="applyFilters('Alle', this)" checked="checked" data-filter="Alle" type="checkbox">
                     <span class="lever"></span>
                     <span id="showAllFiltersToggleText">Vis alle</span>
                 </label>
@@ -62,7 +62,7 @@
             <li>
                 <div class="switch">
                     <label>
-                        <input onchange="applyFilters('##filterTag##', this)" type="checkbox">
+                        <input class="filterCheckbox" onchange="applyFilters('##filterTag##', this)" data-filter="##filterName##" type="checkbox">
                         <span class="lever"></span>
                         <span>##filterToggleText##</span>
                     </label>
