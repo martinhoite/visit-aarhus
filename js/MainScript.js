@@ -264,8 +264,8 @@ function displayMarkerModal(e) {
   $('#modalNavigateToOccurrence').data('longitude', feature.geometry.coordinates[0]);
   $('#modalNavigateToOccurrence').data('latitude', feature.geometry.coordinates[1]);
 
-  //Remove empty p tags
-  $("p").each(function() { 
+  //Remove empty p tags in description
+  $("#modalMarkerDescription p").each(function() { 
     var $el = $(this);
     if($.trim($el.html()) == "&nbsp;") {
       $el.remove();
