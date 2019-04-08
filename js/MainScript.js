@@ -127,9 +127,9 @@ function handleApiData(data, targetAPI) {
     }
   });
   map.addLayer(currentLocationMarker);
-  currentLocationMarker.on('click', function (e) {
-    displayMarkerModal(e);
-  });
+  // currentLocationMarker.on('click', function (e) {
+  //   displayMarkerModal(e);
+  // });
   // markers.addLayer(currentLocationMarker);
   // markers.setGeoJSON(geoJson);
 
@@ -179,7 +179,7 @@ function createMarkerGroup(filters) {
   // if (overlays !== undefined) {
   // map.removeLayer(markerLayer);  
   overlays.clearLayers();
-  console.log('Cleared layers');
+  // console.log('Cleared layers');   
   // }
   overlays.addLayer(markers);
   // markerLayer = map.addLayer(markers);

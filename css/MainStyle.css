@@ -69,3 +69,9 @@ body {
 .margin-left{
   margin-left:15px;
 }
+
+/* Make cluster groups count text more visible on the map */
+.marker-cluster span{
+    font-weight: bold;
+    font-size:14px;
+}
