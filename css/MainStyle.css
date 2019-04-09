@@ -15,12 +15,12 @@ main {
     top: 0;
     bottom: 0;
     width: 100%;
-    z-index:2;
+    z-index: 2;
 }
 
 footer {
     z-index: 3;
-    padding-top: 20px;
+    padding: 20px 5px 5px 5px;
     color: #fff;
     text-shadow: 2px 2px #3d3d3d;
 }
@@ -29,7 +29,7 @@ footer {
     vertical-align: middle;
 }
 
-.overlay{
+.overlay {
     background-color: rgba(69, 69, 69, 0.6);
     padding: 5px 10px;
     border-radius: 10px;
@@ -91,12 +91,16 @@ footer {
     font-size: 30px !important;
 }
 
-.margin-left {
+.ml-15 {
     margin-left: 15px !important;
 }
 
-.margin-right {
+.mr-15 {
     margin-right: 15px !important;
+}
+
+.ml-auto {
+    margin-left: auto;
 }
 
 /* Make cluster groups count text more visible on the map */
@@ -105,11 +109,23 @@ footer {
     font-size: 14px;
 }
 
-#languageControlsContainer > a{
-    padding:0 2px;
+#languageControlsContainer>a {
+    padding: 0 2px;
     box-sizing: border-box;
 }
 
-#languageControlsContainer > a.active > img{
-    border:2px solid yellow;
+#languageControlsContainer>a.active>img {
+    border: 2px solid yellow;
+}
+
+.sticky {
+    position: -webkit-sticky;
+    /* Safari */
+    position: sticky;
+    top: 0;
+}
+
+#filterMenuHeaderContainer{
+    z-index: 10;
+    padding: 5px;
 }

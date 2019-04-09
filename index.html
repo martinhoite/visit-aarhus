@@ -23,44 +23,26 @@
 
 <body>
     <main>
-        <div class="fixed-action-btn">
+        <!-- <div class="fixed-action-btn">
             <a class="btn-floating btn-large red waves-effect waves-light pulse sidenav-trigger"
                 data-target="slide-out">
-                <i class="large material-icons">menu</i>
             </a>
-            <!-- <ul> -->
-            <!-- <li><a class="sidenav-trigger" href="#" data-target="slide-out">Filters</a></li>
-            <li><a href="#">Overview</a></li>
-            <li><a href="#">Stuff</a></li>
-            <li><a href="#">Contact</a></li> -->
-            <!-- <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li> -->
-            <!-- </ul> -->
-        </div>
-        <!-- <nav class='menu-ui'>
-        <a href='#' class='active' data-filter='all'>Show all</a>
-        <a href='#' data-filter='water'>Water Recreation</a>
-        <a href='#' data-filter='outdoor'>Outdoor Recreation</a>
-        <a href='#' data-filter='civil'>Civil War</a>
-        <a href='#' data-filter='wildlife'>Wildlife</a>
-        <a href='#' data-filter='heritage'>Heritage & Culture</a>
-      </nav> -->
+        </div> -->
         <ul id="slide-out" class="sidenav flow-text">
-            <li>
-                <h5 id="filterMenuHeader" class="margin-left">Filtrer begivenheder</h4>
-            </li>
-            <li>
-                <div class="switch">
-                    <label>
-                        <input class="filterCheckbox" id="showAllFiltersToggle" onchange="applyFilters('Alle', this)"
-                            checked="checked" data-filter="Alle" type="checkbox">
-                        <span class="lever"></span>
-                        <span id="showAllFiltersToggleText">Vis alle</span>
-                    </label>
-                </div>
-            </li>
+            <div id="filterMenuHeaderContainer" class="sticky white">
+                <h5 id="filterMenuHeader" class="ml-15">Filtrer begivenheder</h4>
+                    <li>
+                        <div class="switch">
+                            <label>
+                                <input class="filterCheckbox" id="showAllFiltersToggle"
+                                    onchange="applyFilters('Alle', this)" checked="checked" data-filter="Alle"
+                                    type="checkbox">
+                                <span class="lever"></span>
+                                <span id="showAllFiltersToggleText">Vis alle</span>
+                            </label>
+                        </div>
+                    </li>
+            </div>
             <template id="filterToggleTemplate">
                 <li>
                     <div class="switch">
@@ -73,12 +55,6 @@
                     </div>
                 </li>
             </template>
-            <!-- <li><a href='#' class='active' data-filter='all'>Show all</a></li>
-        <li><a href='#' data-filter='water'>Water Recreation</a></li>
-        <li><a href='#' data-filter='outdoor'>Outdoor Recreation</a></li>
-        <li><a href='#' data-filter='civil'>Civil War</a></li>
-        <li><a href='#' data-filter='wildlife'>Wildlife</a></li>
-        <li><a href='#' data-filter='heritage'>Heritage & Culture</a></li> -->
         </ul>
 
         <div id='map'></div>
@@ -87,23 +63,24 @@
             <div class="modal-content">
                 <h3 id="modalMarkerTitle">Modal Header</h3>
                 <p id="modalEventTimeContainer" class="flow-text">
-                    Fra kl: <span id="modalFromTime"></span>
+                    <span id="modalFromTimeText">Fra:</span> <span id="modalFromTime"></span>
                     <br>
-                    <span>Til kl:</span> <span id="modalToTime"></span>
+                    <span id="modalToTimeText">Til:</span> <span id="modalToTime"></span>
                 </p>
                 <div id="modalTagContainer"></div>
                 <p id="modalMarkerDescription" class="flow-text"></p>
             </div>
             <div class="modal-footer">
-                <span class="flow-text margin-right left"><span id="modalAddress"></span></span>
+                <span class="flow-text mr-15 left"><span id="modalAddress"></span></span>
                 <a id="modalNavigateToOccurrence" href="#!" data-longitude="" data-latitude=""
-                    class="waves-effect waves-blue blue btn left margin-right">Navigate
+                    class="waves-effect waves-blue blue btn left mr-15">Naviger
                     <i class="material-icons right">navigation</i>
                 </a>
-                <a id="modalSendToPhone" href="#!" class="margin-left waves-effect waves-light green btn left">Send to phone
+                <a id="modalSendToPhone" href="#!" class="ml-15 waves-effect waves-light green btn left">Send to
+                    mobil
                     <i class="material-icons right">phone_android</i>
                 </a>
-                <a id="modalClose" href="#!" class="red btn modal-action modal-close">Close
+                <a id="modalClose" href="#!" class="red btn modal-action modal-close">Luk
                     <i class="material-icons right">close</i>
                 </a>
             </div>
@@ -111,34 +88,20 @@
     </main>
 
     <footer class="valign-wrapper">
-        <!-- <div class="container">
-            <div class="row">
-                <div class="col l6 s12">
-                    <h5 class="white-text">Footer Content</h5>
-                    <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer
-                        content.</p>
-                </div>
-                <div class="col l4 offset-l2 s12">
-                    <h5 class="white-text">Links</h5>
-                    <ul>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div> -->
-        <div class="overlay left">
-            <span class="">© 2019 Visit Aarhus <img class="v-align-middle" src="images/visitaarhus-logo.png"
-                    alt="Visit Aarhus logo"></span>
+        <div class="overlay left hide-on-small-only">
+            <span class="">© 2019 <img class="v-align-middle" height="20px" src="images/visitaarhus-logo.png"
+                    alt="Visit Aarhus logo"> Visit Aarhus </span>
         </div>
-        <div id="languageControlsContainer" class="margin-left overlay hide-on-small-only">
+        <div id="languageControlsContainer" class="ml-auto overlay">
+            <button id="filterBtn" class="waves-effect waves-light sidenav-trigger btn-small"
+                data-target="slide-out">Vis
+                filtre<i class="material-icons right">filter_list</i>
+            </button>
             <a href="#!" onclick="changeActiveLanguage(this);" data-language="da" class="active">
                 <img class="v-align-middle" src="images/flag-icons/da.gif" alt="Danish flag">
             </a>
             <a href="#!" onclick="changeActiveLanguage(this);" data-language="no">
-                <img class="v-align-middle" src="images/flag-icons/no.gif"  alt="Norwegian flag">
+                <img class="v-align-middle" src="images/flag-icons/no.gif" alt="Norwegian flag">
             </a>
             <a href="#!" onclick="changeActiveLanguage(this);" data-language="de">
                 <img class="v-align-middle" src="images/flag-icons/de.gif" alt="German flag">
@@ -146,6 +109,7 @@
             <a href="#!" onclick="changeActiveLanguage(this);" data-language="en-us">
                 <img class="v-align-middle" src="images/flag-icons/en-us.gif" alt="Eng/US flag">
             </a>
+
         </div>
     </footer>
 
@@ -165,7 +129,15 @@
         rel='stylesheet' />
     <!-- Load Moment.js for an easier time with handling Dates & Times -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <!-- Add support for Danish Datetime formats -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/da.js"></script>
+    <!-- Add support for Norwegian Datetime formats -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/nb.js"></script>
+    <!-- Add support for German Datetime formats -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/de.js"></script>
+    <!-- Add support for English (US) Datetime formats Sorry brits :( it's more universal to understand!-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/en.js"></script>
+    
     <!-- Load notify JS for element based notifications -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
     <!-- Load main javascript file -->

@@ -114,22 +114,22 @@ function handleApiData(data, targetAPI) {
   filterTags.sort();
 
   //Add current location marker
-  var currentLocationMarker = L.marker(new L.LatLng(56.153473, 10.214455), {
-    icon: L.mapbox.marker.icon({ 'marker-color': 'FF0000' }),
-    properties: {
-      title: "Dokk1 - Du er her", //occurrence.event.name,
-      address: "Hack Kampmanns Pl. 2, 8000 Aarhus",
-      description: "Du er i Dokk1 lige nu", //place.tags, //occurrence.event.description,
-      tags: ["Guidance", "Information", "Dokk1"],
-      'marker-color': '#ff0000'
-    },
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [10.214455, 56.153473]
-    }
-  });
-  map.addLayer(currentLocationMarker);
+  // var currentLocationMarker = L.marker(new L.LatLng(56.153473, 10.214455), {
+  //   icon: L.mapbox.marker.icon({ 'marker-color': 'FF0000' }),
+  //   properties: {
+  //     title: "Dokk1 - Du er her", //occurrence.event.name,
+  //     address: "Hack Kampmanns Pl. 2, 8000 Aarhus",
+  //     description: "Du er i Dokk1 lige nu", //place.tags, //occurrence.event.description,
+  //     tags: ["Guidance", "Information", "Dokk1"],
+  //     'marker-color': '#ff0000'
+  //   },
+  //   type: 'Feature',
+  //   geometry: {
+  //     type: 'Point',
+  //     coordinates: [10.214455, 56.153473]
+  //   }
+  // });
+  // map.addLayer(currentLocationMarker);
   // currentLocationMarker.on('click', function (e) {
   //   displayMarkerModal(e);
   // });
@@ -238,25 +238,26 @@ $(document).ready(function () {
       //Handle different languages
       switch (currentLanguage) {
         case 'da':
-          notificationText = "Klik for at filtrere";
+          notificationText = "Klik her for at filtrere";
           break;
         case 'no':
-          notificationText = "Klikk for å filtrere";
+          notificationText = "Klikk her for å legge til filter";
           break;
         case 'de':
-          notificationText = "Klicken Sie, um zu filtern";
+          notificationText = "Klicken Sie hier, um Filter hinzuzufügen";
           break;
         case 'en-us':
           notificationText = "Click here to add filters";
           break;
         default:
-          notificationText = "Klik for at filtrere";
+          notificationText = "Klik her for at filtrere";
           break;
       }
-      $(".fixed-action-btn").notify(
+      // $(".fixed-action-btn").notify(
+      $("#filterBtn").notify(
         notificationText,
         {
-          position: "left-middle",
+          position: "top-right",
           autoHide: true,
           autoHideDelay: 10000,
           clickToHide: true,
@@ -315,6 +316,29 @@ function displayMarkerModal(e) {
     $('#modalEventTimeContainer').hide();
   } else {
     $('#modalEventTimeContainer').show();
+    switch (currentLanguage) {
+      case "da":
+        //Set all datetimes to be in Danish format (and language)
+        moment.locale('da');
+        break;
+      case 'no':
+        //Set all datetimes to be in Norwegian format (and language)
+        moment.locale('no');
+        break;
+      case 'de':
+        //Set all datetimes to be in German format (and language)
+        moment.locale('de');
+        break;
+      case 'en-us':
+        //Set all datetimes to be in English(US) format (and language)
+        moment.locale('en');
+        break;
+      default:
+        //Fallback to english since most will understand that.
+        //Set all datetimes to be in English(US) format (and language)
+        moment.locale('en');
+        break;
+    }
     $('#modalFromTime').html(moment(feature.properties.startDate).format('LLLL'));
     $('#modalToTime').html(moment(feature.properties.endDate).format('LLLL'));
   }
@@ -323,7 +347,7 @@ function displayMarkerModal(e) {
   $('#modalNavigateToOccurrence').data('latitude', feature.geometry.coordinates[1]);
 
   //Remove empty p tags in description
-  $("#modalMarkerDescription p").each(function () {
+  $("#modalMarkerDescription > p").each(function () {
     var $el = $(this);
     if ($.trim($el.html()) == "&nbsp;") {
       $el.remove();
@@ -396,43 +420,63 @@ function changeActiveLanguage(e) {
 
   switch (currentLanguage) {
     case 'da':
-      $('#languageControlsContainer').notify("Sprog er sat til Dansk", { position: "top-middle", className: "success" });
+      //Make sure we hide all current notifications as they're not necessarily in the correct language anymore
+      $('.notifyjs-wrapper').trigger('notify-hide');
+      $(e).notify("Sprog er sat til Dansk", { position: "top-right", className: "success", arrowSize: 12 });
       $('#filterMenuHeader').text('Filtrer begivenheder');
       $('#showAllFiltersToggleText').text('Vis alle');
+      $('#filterBtn').html('Vis filtre<i class="material-icons right">filter_list</i>');
       //Adjust modal text
+      $('#modalFromTimeText').text('Fra:');
+      $('#modalToTimeText').text('Til:');
       $('#modalNavigateToOccurrence').html('Naviger<i class="material-icons right">navigation</i>');
       $('#modalSendToPhone').html('Send til mobil<i class="material-icons right">phone_android</i>');
       $('#modalClose').html('Luk<i class="material-icons right">close</i>');
       break;
     case 'no':
-      $('#languageControlsContainer').notify("Språk satt til norsk", { position: "top-middle", className: "success" });
+      //Make sure we hide all current notifications as they're not necessarily in the correct language anymore
+      $('.notifyjs-wrapper').trigger('notify-hide');
+      $(e).notify("Språk satt til norsk", { position: "top-right", className: "success", arrowSize: 12 });
       $('#filterMenuHeader').text('Filter hendelser');
       $('#showAllFiltersToggleText').text('Vis alle');
+      $('#filterBtn').html('Vis filtre<i class="material-icons right">filter_list</i>');
       //Adjust modal text
+      $('#modalFromTimeText').text('Fra:');
+      $('#modalToTimeText').text('Til:');
       $('#modalNavigateToOccurrence').html('Navigere<i class="material-icons right">navigation</i>');
       $('#modalSendToPhone').html('Send til mobil<i class="material-icons right">phone_android</i>');
       $('#modalClose').html('Lukk<i class="material-icons right">close</i>');
       break;
     case 'de':
-      $('#languageControlsContainer').notify("Sprache auf Deutsch eingestellt", { position: "top-middle", className: "success" });
+      //Make sure we hide all current notifications as they're not necessarily in the correct language anymore
+      $('.notifyjs-wrapper').trigger('notify-hide');
+      $(e).notify("Sprache auf Deutsch eingestellt", { position: "top-right", className: "success", arrowSize: 12 });
       $('#filterMenuHeader').text('Ereignisse filtern');
       $('#showAllFiltersToggleText').text('Zeig es allen');
+      $('#filterBtn').html('Filter anzeigen<i class="material-icons right">filter_list</i>');
       //Adjust modal text
+      $('#modalFromTimeText').text('Von:');
+      $('#modalToTimeText').text('Bis:');
       $('#modalNavigateToOccurrence').html('Navigieren<i class="material-icons right">navigation</i>');
       $('#modalSendToPhone').html('Senden Sie an das Telefon<i class="material-icons right">phone_android</i>');
       $('#modalClose').html('Schließen<i class="material-icons right">close</i>');
       break;
     case 'en-us':
-      $('#languageControlsContainer').notify("Language set to English", { position: "top-middle", className: "success" });
+      //Make sure we hide all current notifications as they're not necessarily in the correct language anymore
+      $('.notifyjs-wrapper').trigger('notify-hide');
+      $(e).notify("Language set to English", { position: "top-right", className: "success", arrowSize: 12 });
       $('#filterMenuHeader').text('Filter events');
       $('#showAllFiltersToggleText').text('Show all');
+      $('#filterBtn').html('Show filters<i class="material-icons right">filter_list</i>');
       //Adjust modal text
+      $('#modalFromTimeText').text('From:');
+      $('#modalToTimeText').text('To  :');
       $('#modalNavigateToOccurrence').html('Navigate<i class="material-icons right">navigation</i>');
       $('#modalSendToPhone').html('Send to mobile<i class="material-icons right">phone_android</i>');
       $('#modalClose').html('Close<i class="material-icons right">close</i>');
       break;
     default:
-      $('#languageControlsContainer').notify("Unable to set language", { position: "top-middle", className: "error" });
+      $(e).notify("Unable to set language", { position: "top-right", className: "error" });
       break;
   }
 }
