@@ -412,6 +412,13 @@ function applyFilters(tagName, checkboxObj) {
     $('#showAllFiltersToggle').prop('checked', true);
   }
 }
+
+//Send event to phone handling
+function sendEventToPhone() {
+  alert('This will show a form to fill in your phone number\nand allow you to send the event to your phone');
+}
+
+//Translation handling
 var currentLanguage = "da";
 function changeActiveLanguage(e) {
   $('#languageControlsContainer').find('a').removeClass('active');
