@@ -221,7 +221,12 @@ const idleWait = 5000;
 $(document).ready(function () {
   //Initialization for MaterializeCSS
   $('.tooltipped').tooltip();
-  $('.modal').modal();
+  $('.modal').modal({
+    onCloseStart: function () {
+      //Make sure modal's scroll is reset everytime it reopens
+      $('.modal-content').scrollTop(0);
+    }
+  });
   $('.fixed-action-btn').floatingActionButton();
   $('.sidenav').sidenav({ edge: 'right' });
   // console.log($('#showAllFiltersToggle').prop('checked'));
@@ -346,14 +351,15 @@ function displayMarkerModal(e) {
   $('#modalNavigateToOccurrence').data('longitude', feature.geometry.coordinates[0]);
   $('#modalNavigateToOccurrence').data('latitude', feature.geometry.coordinates[1]);
 
-  //Remove empty p tags in description
   $("#modalMarkerDescription > p").each(function () {
     var $el = $(this);
+    //Remove empty p tags in description
     if ($.trim($el.html()) == "&nbsp;") {
       $el.remove();
     }
+    //Remove external styles on p tags to keep descriptions coherent
+    $el.removeAttr("style");
   });
-
   modalInstance.open();
 
   //Pan view to the clicked marker
