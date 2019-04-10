@@ -33,6 +33,18 @@
             <div id="filterMenuHeaderContainer" class="sticky white">
                 <h5 id="filterMenuHeader" class="ml-15">Filtrer begivenheder</h4>
                     <li>
+                        <div class="ml-15 mr-15">
+                            <div class="input-field col s3">
+                                <input type="text" class="datepicker">
+                                <label><i class="material-icons inline v-align-middle">date_range</i> Start date</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input type="text" class="datepicker">
+                                <label><i class="material-icons inline v-align-middle">date_range</i> End date</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
                         <div class="switch">
                             <label>
                                 <input class="filterCheckbox" id="showAllFiltersToggle"
@@ -77,7 +89,8 @@
                     class="waves-effect waves-blue blue btn left mr-15">Naviger
                     <i class="material-icons right">navigation</i>
                 </a>
-                <a id="modalSendToPhone" href="#!" onclick="sendEventToPhone();" class="ml-15 waves-effect waves-light green btn left">Send to
+                <a id="modalSendToPhone" href="#!" onclick="sendEventToPhone();"
+                    class="ml-15 waves-effect waves-light green btn left">Send til
                     mobil
                     <i class="material-icons right">phone_android</i>
                 </a>
@@ -93,6 +106,7 @@
             <span class="">© 2019 <img class="v-align-middle" height="20px" src="images/visitaarhus-logo.png"
                     alt="Visit Aarhus logo"> Visit Aarhus </span>
         </div>
+
         <div id="languageControlsContainer" class="ml-auto overlay">
             <button id="filterBtn" class="waves-effect waves-light sidenav-trigger btn-small"
                 data-target="slide-out">Vis

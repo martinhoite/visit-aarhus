@@ -221,6 +221,14 @@ const idleWait = 5000;
 $(document).ready(function () {
   //Initialization for MaterializeCSS
   $('.tooltipped').tooltip();
+  $('.collapsible').collapsible();
+  $('.datepicker').datepicker({
+    autoClose: true,
+    defaultDate: new Date(),
+    minDate: new Date(),
+    setDefaultDate: true,
+    container: 'body'
+  });
   $('.modal').modal({
     onCloseStart: function () {
       //Make sure modal's scroll is reset everytime it reopens
