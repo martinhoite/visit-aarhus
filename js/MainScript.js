@@ -88,7 +88,7 @@ function handleApiData(data, targetAPI) {
           },
           properties: {
             title: place.name, //occurrence.event.name,
-            address: place.streetAddress + ", " + place.postalCode + " " + place.addressLocality,
+            address: '<i class="material-icons inline-icon">home</i>' + place.streetAddress + ", " + place.postalCode + " " + place.addressLocality,
             description: place.description, //place.tags, //occurrence.event.description,
             tags: place.tags,
             // 'marker-color': '#000'
@@ -198,17 +198,22 @@ function createMarkerGroup(filters) {
 // populateMap("places","items_per_page=1250");
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
 
-let apiQueryParameters =
-  encodeURIComponent("startDate[strictly_after]") + "=" + encodeURIComponent(moment().startOf('day').format())
-  + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format())
-  + "&items_per_page=200";
+
 
 //Manual replacement of characters that need to be URL encoded due to the API wanting a mix of things...
 //Actually nevermind, let's not use regex today. (See above for finished result instead)
 // apiQueryParameters = apiQueryParameters.replace("[","%5B").replace("]","%5D").replace(":","%3A");
 
-// console.log(apiQueryParameters);
-populateMap("occurrences", apiQueryParameters);
+// let apiQueryParameters =
+//   encodeURIComponent("startDate[strictly_after]") + "=" + encodeURIComponent(moment().startOf('day').format())
+//   + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format())
+//   + "&items_per_page=200";
+// populateMap("occurrences", apiQueryParameters);
+//REFACTORED
+showOccurences();
+
+
+
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D%3D2019-04-08T00%3A00%3A00%2B02%3A00%26endDate%5Bstrictly_before%5D%3D2019-04-08T23%3A59%3A59%2B02%3A00%26items_per_page%3D200");
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-08T00%3A00%3A00%2B02%3A00&endDate%5Bstrictly_before%5D=2019-04-08T23%3A59%3A59%2B02%3A00&items_per_page=200");
 // populateMap("occurrences", "startDate%5Bstrictly_after%5D=2019-04-07T00%3A00%3A00%2B00%3A00&endDate%5Bstrictly_before%5D=2019-04-08T00%3A00%3A00%2B00%3A00&items_per_page=200");
@@ -500,4 +505,16 @@ function changeActiveLanguage(e) {
       $(e).notify("Unable to set language", { position: "top-right", className: "error" });
       break;
   }
+}
+
+function showPlaces(state) {
+  populateMap("places", "items_per_page=1250");
+}
+
+function showOccurences() {
+  let apiQueryParameters =
+    encodeURIComponent("startDate[strictly_after]") + "=" + encodeURIComponent(moment().startOf('day').format())
+    + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format())
+    + "&items_per_page=200";
+  populateMap("occurrences", apiQueryParameters);
 }
