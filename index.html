@@ -69,7 +69,7 @@
                 <li>
                     <div class="switch">
                         <label>
-                            <input class="filterCheckbox" onchange="applyFilters('##filterTag##', this)"
+                            <input class="filterCheckbox" onchange="applyFilters(this)"
                                 data-filter="##filterName##" type="checkbox">
                             <span class="lever"></span>
                             <span>##filterToggleText##</span>
@@ -93,17 +93,17 @@
                 <p id="modalMarkerDescription" class="flow-text"></p>
             </div>
             <div class="modal-footer">
-                <span class="flow-text mr-15 left"><span id="modalAddress"></span></span>
+                <span style="margin-top: 5px;" class="mr-15 left"><span id="modalAddress"></span></span>
                 <a id="modalNavigateToOccurrence" href="#!" data-longitude="" data-latitude=""
-                    class="waves-effect waves-blue blue btn left mr-15">Naviger
+                    class="waves-effect waves-blue blue btn-small left mr-15">Naviger
                     <i class="material-icons right">navigation</i>
                 </a>
                 <a id="modalSendToPhone" href="#!" onclick="sendEventToPhone();"
-                    class="ml-15 waves-effect waves-light green btn left">Send til
+                    class="ml-15 waves-effect waves-light green btn-small left">Send til
                     mobil
                     <i class="material-icons right">phone_android</i>
                 </a>
-                <a id="modalClose" href="#!" class="red btn modal-action modal-close">Luk
+                <a id="modalClose" href="#!" class="red btn-small modal-action modal-close">Luk
                     <i class="material-icons right">close</i>
                 </a>
             </div>

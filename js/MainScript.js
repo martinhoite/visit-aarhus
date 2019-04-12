@@ -397,15 +397,27 @@ function showPosition(position) {
 }
 
 //Handling for adding filters for all the current tags available on the current vissible occurences
-let filterToggleTemple = $('#filterToggleTemplate').html();
+let filterToggleTemplate = $('#filterToggleTemplate').html();
 function createFilterToggles() {
   $.each(filterTags, function (k, tag) {
-    let filterToggle = filterToggleTemple.replace("##filterTag##", tag).replace("##filterToggleText##", tag).replace("##filterName##", tag);
+    let filterToggle = filterToggleTemplate.replace("##filterToggleText##", tag).replace("##filterName##", tag);
     $(filterToggle).appendTo($('#slide-out'));
   });
 };
 
-function applyFilters(tagName, checkboxObj) {
+function showPlaces() {
+  populateMap("places", "items_per_page=1250");
+}
+
+function showOccurences() {
+  let apiQueryParameters =
+    encodeURIComponent("startDate[strictly_after]") + "=" + encodeURIComponent(moment().startOf('day').format())
+    + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format())
+    + "&items_per_page=200";
+  populateMap("occurrences", apiQueryParameters);
+}
+
+function applyFilters(checkboxObj) {
   let filteredTags = [];
   // console.log(checkboxObj);
   // console.log('Applying filters');
@@ -505,16 +517,4 @@ function changeActiveLanguage(e) {
       $(e).notify("Unable to set language", { position: "top-right", className: "error" });
       break;
   }
-}
-
-function showPlaces(state) {
-  populateMap("places", "items_per_page=1250");
-}
-
-function showOccurences() {
-  let apiQueryParameters =
-    encodeURIComponent("startDate[strictly_after]") + "=" + encodeURIComponent(moment().startOf('day').format())
-    + "&" + encodeURIComponent("endDate[strictly_before]") + "=" + encodeURIComponent(moment().endOf('day').format())
-    + "&items_per_page=200";
-  populateMap("occurrences", apiQueryParameters);
 }
