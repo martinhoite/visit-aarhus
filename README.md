@@ -2,4 +2,4 @@
 UX &amp; SoME project, 2nd semester Multimediadesigner
 
 Prototype available at:
-https://mdu.webxcellent.dk/ux-some/
+https://martinhoite.github.io/visit-aarhus/
